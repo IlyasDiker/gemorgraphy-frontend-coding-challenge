@@ -23,7 +23,8 @@ export default {
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
         border-bottom: 1px solid rgba(245, 245, 245, 0.247);
-
+        z-index: 99;
+        back
         .navbar-logo{
             font-size: 1rem;
         }

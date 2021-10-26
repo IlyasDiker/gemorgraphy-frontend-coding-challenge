@@ -59,6 +59,7 @@ export default {
 
 .content{
 	margin-top:80px;
+	margin-bottom: 50px;
 	color: white;
 	width: 90vw;
 	max-width: 1600px;
