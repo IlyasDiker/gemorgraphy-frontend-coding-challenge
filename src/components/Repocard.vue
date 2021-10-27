@@ -29,7 +29,8 @@
                 <button v-on:click="logselected()" class="rounded icon"><i class='bx bx-code-block' ></i></button>
             </div>
         </div>
-        <footer v-if="isOpened" class="card-footer">
+        <footer class="card-footer" :class="{ opened: isOpened }">
+            <p class="label">Source code:</p>
             <code>
             {{repository}}
             </code>
@@ -44,15 +45,15 @@ export default {
     },
     methods: {
         logselected: () => {
-            console.log("Logged Item : ", this.repository)
+            console.log("Logged Item : ", this.$props.repository)
         }
     },
     data () {
         return {
             isOpened: false,
+            repo: this.repository,
         }
     },
-    
     name: "Repocard",
 }
 </script>
@@ -65,7 +66,7 @@ export default {
         width: 100%;
         display: flex;
         flex-direction: column;
-        
+        overflow: hidden;
         border-radius: 10px;
         border: 1px solid #3b3b3b;
         transition: 0.3s ease-in-out;
@@ -85,12 +86,21 @@ export default {
         }
         .card-footer{
             transition: 0.2s ease-in-out;
-            padding: 20px;
+            padding: 0px 20px;
             background: #1b1b1b;
             font-size: 10px;
-            max-height: 300px;
+            max-height: 0px;
             overflow-y: auto;
-            animation: slide 1s ease 3.5s forwards;
+            position: relative;
+            .label{
+                font-size: .7rem;
+                font-weight: 500;
+                margin-bottom: 5px;
+            }
+            &.opened{
+                max-height: 300px;
+                padding: 20px;
+            }
         }
         .card-tools{
             display: flex;
@@ -107,6 +117,7 @@ export default {
                 width: fit-content;
                 transition: all 0.5s ease-in-out;
                 flex-direction: row;
+                align-items: center;
                 cursor: default;
                 &:hover{
                     opacity: 1;
@@ -121,7 +132,7 @@ export default {
                     transition: 0.5s ease-in-out;
                     transform-origin:left;
                     width: fit-content;
-                    max-width: 0;
+                    max-width: 0px;
                     overflow: hidden;
                 }
                 label{

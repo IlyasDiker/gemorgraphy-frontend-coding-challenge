@@ -18,7 +18,8 @@ import Repocard from './components/Repocard.vue'
 export default {
 	data () {
 		return {
-			repos: null
+			repos: null,
+			created_after: null,
 		}
 	},
 	name: "App",
@@ -26,7 +27,16 @@ export default {
 		Navbar, Repocard
 	},
 	mounted () {
-		fetch("https://api.github.com/search/repositories?q=created:>2017-10-22&sort=stars&order=desc&page=1")
+		var date = new Date();
+		var lastDate =  new Date().setDate(date.getDate() - 30);
+		console.log(lastDate);
+		var fmdate = `${lastDate.getFullYear()}-${lastDate.getMonth()}-${lastDate.getDay()}`;
+		console.log(fmdate);
+
+		let apiEndpoint = `https://api.github.com/search/repositories?q=created:>${fmdate}&sort=stars&order=desc&page=1`;
+		fetch(apiEndpoint, {
+			method: 'GET',
+		})
 			.then(res => res.json())
 			.then(result => {
 				console.log('Result fetch data : ', result);
