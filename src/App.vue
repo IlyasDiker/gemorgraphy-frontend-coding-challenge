@@ -1,5 +1,6 @@
 <template>
 	<Navbar></Navbar>
+	
 	<div class="container">
 		<div class="content">
 			<div class="cards-grid">
@@ -8,7 +9,7 @@
 				</div>
 			</div>
 		</div>
-	</div>
+	</div>{{createdBefore()}}
 </template>
 
 <script>
@@ -18,6 +19,11 @@ import Repocard from './components/Repocard.vue'
 export default {
 	data () {
 		return {
+			createdBefore: (() => {
+				var date = new Date(new Date() -3);
+				return date.toISOString().split('T')[0];
+			})(),
+			API_Endpoint: `https://api.github.com/search/repositories?q=created:>${this.createdBefore}&sort=stars&order=desc&page=1`,
 			repos: null,
 			created_after: null,
 		}
@@ -27,16 +33,13 @@ export default {
 		Navbar, Repocard
 	},
 	mounted () {
-		var date = new Date();
-		var lastDate =  new Date().setDate(date.getDate() - 30);
-		console.log(lastDate);
-		var fmdate = `${lastDate.getFullYear()}-${lastDate.getMonth()}-${lastDate.getDay()}`;
+		var date = new Date(new Date() -3);
+		
+		var fmdate = date.toISOString().split('T')[0];
 		console.log(fmdate);
 
 		let apiEndpoint = `https://api.github.com/search/repositories?q=created:>${fmdate}&sort=stars&order=desc&page=1`;
-		fetch(apiEndpoint, {
-			method: 'GET',
-		})
+		fetch(apiEndpoint)
 			.then(res => res.json())
 			.then(result => {
 				console.log('Result fetch data : ', result);
@@ -47,7 +50,7 @@ export default {
 </script>
 
 <style lang="less">
-// I Always reset everything so i have controle over everything 😈
+// I Always reset everything so i have controle over everything 😈.
 *{
 	margin: 0px;
 	padding: 0px;
