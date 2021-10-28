@@ -16,7 +16,7 @@
                         <i class='bx bx-bug'></i>
                         <span>{{repository.open_issues_count}}</span>
                     </div>
-                    <div class="tool" :title="'Created ' + moment(repository.created_at).format('LL')">
+                    <div class="tool" :title="`Created ${moment(repository.created_at).format('LL')}`">
                         {{ moment(repository.created_at, 'YYYY-MM-DDTHH:mm').fromNow() }}
                     </div>
                 </div>
