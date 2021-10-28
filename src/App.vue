@@ -9,7 +9,7 @@
 				</div>
 			</div>
 		</div>
-	</div>{{createdBefore()}}
+	</div>
 </template>
 
 <script>
@@ -17,13 +17,27 @@ import Navbar from './components/Navbar.vue'
 import Repocard from './components/Repocard.vue' 
 
 export default {
+	methods: {
+		fetchData () {
+			let date = this.createdBefore;
+			let page = this.page;
+			let API_Endpoint = `https://api.github.com/search/repositories?q=created:>${date}&sort=stars&order=desc&page=${page}`
+			fetch(API_Endpoint)
+				.then(res => res.json())
+				.then(result => {
+					console.log('Result fetch data : ', result);
+					this.repos = result.items;
+				})
+		},
+	},
 	data () {
 		return {
 			createdBefore: (() => {
-				var date = new Date(new Date() -3);
+				var date = new Date(new Date().getFullYear(), new Date().getMonth() - 1, new Date().getDate());
 				return date.toISOString().split('T')[0];
 			})(),
-			API_Endpoint: `https://api.github.com/search/repositories?q=created:>${this.createdBefore}&sort=stars&order=desc&page=1`,
+			page: 1,
+			API_Endpoint: `https://api.github.com/search/repositories?q=created:>${this.createdBefore}&sort=stars&order=desc&page=${this.page}`,
 			repos: null,
 			created_after: null,
 		}
@@ -32,19 +46,8 @@ export default {
 	components: {
 		Navbar, Repocard
 	},
-	mounted () {
-		var date = new Date(new Date() -3);
-		
-		var fmdate = date.toISOString().split('T')[0];
-		console.log(fmdate);
-
-		let apiEndpoint = `https://api.github.com/search/repositories?q=created:>${fmdate}&sort=stars&order=desc&page=1`;
-		fetch(apiEndpoint)
-			.then(res => res.json())
-			.then(result => {
-				console.log('Result fetch data : ', result);
-				this.repos = result.items;
-			})
+	mounted() {
+		this.fetchData();
 	}
 }
 </script>

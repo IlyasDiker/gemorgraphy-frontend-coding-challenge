@@ -8,29 +8,26 @@
                 <b>{{repository.name}}</b>
                 <p class="description" v-if="repository.description">{{repository.description}}</p>
                 <div class="card-tools">
-                    <div class="tool" title="Stargazers">
+                    <div class="tool" :title="`${repository.stargazers_count} Stargazers`">
                         <i class='bx bx-star'></i>
-                        <div class="show-on-hover">
-                            <label>Stargazers:</label>
-                        </div>
                         <span>{{repository.stargazers_count}}</span>
                     </div>
-                    <div class="tool" title="Issues">
+                    <div class="tool" :title="`${repository.open_issues_count} Issues`">
                         <i class='bx bx-bug'></i>
-                        <div class="show-on-hover">
-                            <label>Issues:</label>
-                        </div>
                         <span>{{repository.open_issues_count}}</span>
+                    </div>
+                    <div class="tool" :title="'Created ' + moment(repository.created_at).format('LL')">
+                        {{ moment(repository.created_at, 'YYYY-MM-DDTHH:mm').fromNow() }}
                     </div>
                 </div>
             </div>
             <div class="flex-row gap-5">
                 <button v-on:click="isOpened = !isOpened" class="rounded icon"><i class='bx bx-chevron-down'></i></button>
-                <button v-on:click="logselected()" class="rounded icon"><i class='bx bx-code-block' ></i></button>
+                <button v-on:click="logselected(repository)" class="rounded icon"><i class='bx bx-code-block' ></i></button>
             </div>
         </div>
         <footer class="card-footer" :class="{ opened: isOpened }">
-            <p class="label">Source code:</p>
+            <p class="label">FOR DEBUG</p>
             <code>
             {{repository}}
             </code>
@@ -39,13 +36,20 @@
 </template>
 
 <script>
+import moment from 'moment'
+
 export default {
     props: {
         repository: null,
     },
     methods: {
-        logselected: () => {
-            console.log("Logged Item : ", this.$props.repository)
+        logselected: (data) => {
+            if(this.repo){
+                console.log("Logged Item : ", data)
+            }
+        },
+        moment: (data)=>{
+            return moment(data);
         }
     },
     data () {
