@@ -1,5 +1,5 @@
 <template>
-	<Navbar></Navbar>
+	<Navbar @selectedMode="onModeChange"></Navbar>
 	
 	<div class="container">
 		<div class="content">
@@ -8,7 +8,7 @@
 					<div v-for="item in repos" :key="item.id">
 						<Repocard :repository="item"></Repocard>
 					</div>
-					<div class="pagination-wrapper">
+					<div class="pagination-wrapper" v-if="paginationMode == 'PAGES'">
 						<ul>
 							<li v-for="n in 10" :key="n">
 								<!-- Let's have 10 pages just for the test -->
@@ -18,6 +18,12 @@
 									>{{n}}</button>
 							</li>
 						</ul>
+					</div>
+					<div class="pagination-wrapper" v-if="paginationMode == 'LOAD_MORE'">
+						<button
+							v-on:click="loadMore()"
+							:disabled="page >= pages_count"
+							>Load More</button>
 					</div>
 				</template>
 				<div class="loading" v-else>
@@ -38,6 +44,9 @@ export default {
 		ObserveVisibility
 	},
 	methods: {
+		onModeChange (mode) {
+			this.paginationMode = mode;
+		},
 		gotoTop () {
 			document.querySelector('.container').scrollTo(0,0)
 		},
@@ -47,8 +56,10 @@ export default {
 			this.gotoTop();
 		},
 		loadMore () {
-			this.page++;
-			this.fetchData({append: true});
+			if (this.page < this.pages_count) {
+				this.page++;
+				this.fetchData({append: true});
+			}
 		},
 		fetchData (req = {append: false}) {
 			let date = this.createdBefore;
@@ -84,6 +95,7 @@ export default {
 			pages_count: 0,
 			repos: [],
 			created_after: null,
+			paginationMode: 'LOAD_MORE',
 		}
 	},
 	name: "App",
@@ -118,7 +130,7 @@ export default {
 }
 
 .content{
-	margin-top:80px;
+	margin-top:100px;
 	margin-bottom: 50px;
 	color: white;
 	width: 90vw;
