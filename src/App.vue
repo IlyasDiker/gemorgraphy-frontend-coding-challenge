@@ -31,7 +31,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="loading-page" v-if="isPageLoading">
+		<div class="loading-page" v-if="isPageLoading == true">
 			<i class='bx bx-loader-alt bx-spin'></i>
 		</div>
 	</div>
@@ -68,6 +68,7 @@ export default {
 			let date = this.createdBefore;
 			let page = this.page;
 			let API_Endpoint = `https://api.github.com/search/repositories?q=created:>${date}&sort=stars&order=desc&page=${page}`
+			this.isPageLoading = true;
 			fetch(API_Endpoint)
 				.then(res => res.json())
 				.then(result => {
@@ -76,6 +77,7 @@ export default {
 						this.pages_count = Math.ceil(result.total_count / result.items.length);
 						console.log(this.pages_count);
 					}
+					this.isPageLoading = false;
 					if(result.items){
 						if(req.append){
 							result.items.forEach(element => {
@@ -99,7 +101,7 @@ export default {
 			repos: [],
 			created_after: null,
 			paginationMode: 'LOAD_MORE',
-			isPageLoading: false,
+			isPageLoading: true,
 		}
 	},
 	name: "App",
@@ -162,6 +164,22 @@ export default {
 		flex-direction: row;
 		gap: 10px;
 	}
+}
+
+.loading-page{
+	position: fixed;
+	inset: 0;
+	top: 0;
+	right: 0;
+	left: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, .3);
+	backdrop-filter: blur(2px);
+	-webkit-backdrop-filter: blur(2px);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 40px;
 }
 
 </style>
