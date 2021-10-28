@@ -2,7 +2,7 @@
     <nav class="navbar">
         <span class="navbar-logo">Gemophraphy-frontend-challenge</span>
         <div class="select-mode">
-            <!-- Pagination Mode -->
+            <!-- Pagination Mode this is used to change the pagination mode -->
             <div>
                 <button 
                     :class="{active: paginationMode == 'LOAD_MORE'}"

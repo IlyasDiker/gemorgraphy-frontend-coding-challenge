@@ -19,10 +19,14 @@
                     <div class="tool" :title="`Created ${moment(repository.created_at).format('LL')}`">
                         {{ moment(repository.created_at, 'YYYY-MM-DDTHH:mm').fromNow() }}
                     </div>
+                    <div class="tool" title="Creator">
+                        {{ repository.owner.login }}
+                    </div>
                 </div>
             </div>
+            <!-- some buttons to show Json Data for DEBUG and a button to open the repo on github -->
             <div class="flex-row gap-5 card-btns">
-                <a :href="repository.html_url" target="_blank">
+                <a :href="repository.html_url" target="_blank" title="Open on Github">
                 <button
                     class="rounded small">
                     <i class='bx bx-link-external'></i>
@@ -30,7 +34,7 @@
                 </a>
                 <button
                     v-on:click="isOpened = !isOpened"
-                    class="rounded small">
+                    class="rounded small" title="Open JSON Data">
                     <i class='bx' :class="{'bx-chevron-down': !isOpened, 'bx-chevron-up': isOpened}"></i>
                 </button>
             </div>
@@ -117,7 +121,8 @@ export default {
         .card-tools{
             display: flex;
             flex-direction: row;
-            gap: 10px;
+            flex-wrap: wrap;
+            gap: 8px;
             .tool{
                 color: white;
                 opacity: .7;

@@ -31,6 +31,9 @@
 				</div>
 			</div>
 		</div>
+		<div class="loading-page" v-if="isPageLoading">
+			<i class='bx bx-loader-alt bx-spin'></i>
+		</div>
 	</div>
 </template>
 
@@ -96,6 +99,7 @@ export default {
 			repos: [],
 			created_after: null,
 			paginationMode: 'LOAD_MORE',
+			isPageLoading: false,
 		}
 	},
 	name: "App",
