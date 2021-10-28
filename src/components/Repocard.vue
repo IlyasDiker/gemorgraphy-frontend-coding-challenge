@@ -21,9 +21,18 @@
                     </div>
                 </div>
             </div>
-            <div class="flex-row gap-5">
-                <button v-on:click="isOpened = !isOpened" class="rounded icon"><i class='bx bx-chevron-down'></i></button>
-                <button v-on:click="logselected(repository)" class="rounded icon"><i class='bx bx-code-block' ></i></button>
+            <div class="flex-row gap-5 card-btns">
+                <a :href="repository.html_url" target="_blank">
+                <button
+                    class="rounded small">
+                    <i class='bx bx-link-external'></i>
+                </button>
+                </a>
+                <button
+                    v-on:click="isOpened = !isOpened"
+                    class="rounded small">
+                    <i class='bx' :class="{'bx-chevron-down': !isOpened, 'bx-chevron-up': isOpened}"></i>
+                </button>
             </div>
         </div>
         <footer class="card-footer" :class="{ opened: isOpened }">
@@ -43,11 +52,6 @@ export default {
         repository: null,
     },
     methods: {
-        logselected: (data) => {
-            if(this.repo){
-                console.log("Logged Item : ", data)
-            }
-        },
         moment: (data)=>{
             return moment(data);
         }
@@ -74,9 +78,13 @@ export default {
         border-radius: 10px;
         border: 1px solid #3b3b3b;
         transition: 0.3s ease-in-out;
+        position: relative;
         &:hover{
             -webkit-box-shadow: 0px 0px 15px 0px rgba(255,255,255,0.1); 
             box-shadow: 0px 0px 15px 0px rgba(255,255,255,0.1);
+            .card-btns{
+                opacity: 1;
+            }
         }
         .description{
             display: -webkit-box;
@@ -147,6 +155,13 @@ export default {
                     margin-right: 8px;
                 }
             }
+        }
+        .card-btns{
+            transition: .4s ease-in-out;
+            opacity: .1;
+            position: absolute;
+            top: 10px;
+            right: 10px;
         }
     }
     .image-wrapper{

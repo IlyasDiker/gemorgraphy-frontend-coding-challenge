@@ -22,8 +22,37 @@ button{
     &.icon{
         padding: 8px;
     }
+    &:disabled, &.disabled{
+        opacity: .5;
+        pointer-events: none;
+        &:hover{
+            background: transparent;
+        }
+    }
+    &.active{
+        background: #3d3d3d;
+        color: white;
+        font-weight: 500;
+    }
+    &.small{
+        border: 1px solid rgb(27, 27, 27);
+        padding: 8px;
+        border-radius: 50px;
+        .bx, .bxs{
+            font-size: 15px;
+        }
+        background: #3d3d3d;
+        transition: 0.2s ease-in-out;
+        &:hover{
+            background: lighten(#3d3d3d, 5%);
+        }
+    }
 }
 
+a{
+    text-decoration: none;
+    color: inherit;
+}
 
 .flex-row{
     display: flex;

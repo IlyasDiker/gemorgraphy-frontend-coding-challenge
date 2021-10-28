@@ -4,8 +4,24 @@
 	<div class="container">
 		<div class="content">
 			<div class="cards-grid">
-				<div v-for="item in repos" :key="item.id">
-					<Repocard :repository="item"></Repocard>
+				<template v-if="repos.length > 0" >
+					<div v-for="item in repos" :key="item.id">
+						<Repocard :repository="item"></Repocard>
+					</div>
+					<div class="pagination-wrapper">
+						<ul>
+							<li v-for="n in 10" :key="n">
+								<!-- Let's have 10 pages just for the test -->
+								<button 
+									:class="{active: page == n}"
+									v-on:click="goToPage(n)"
+									>{{n}}</button>
+							</li>
+						</ul>
+					</div>
+				</template>
+				<div class="loading" v-else>
+					<i class='bx bx-loader-alt bx-spin'></i>
 				</div>
 			</div>
 		</div>
@@ -15,10 +31,26 @@
 <script>
 import Navbar from './components/Navbar.vue'
 import Repocard from './components/Repocard.vue' 
+import { ObserveVisibility } from "vue-observe-visibility";
 
 export default {
+	directives: {
+		ObserveVisibility
+	},
 	methods: {
-		fetchData () {
+		gotoTop () {
+			document.querySelector('.container').scrollTo(0,0)
+		},
+		goToPage (index) {
+			this.page = index;
+			this.fetchData({append: false});
+			this.gotoTop();
+		},
+		loadMore () {
+			this.page++;
+			this.fetchData({append: true});
+		},
+		fetchData (req = {append: false}) {
 			let date = this.createdBefore;
 			let page = this.page;
 			let API_Endpoint = `https://api.github.com/search/repositories?q=created:>${date}&sort=stars&order=desc&page=${page}`
@@ -26,9 +58,21 @@ export default {
 				.then(res => res.json())
 				.then(result => {
 					console.log('Result fetch data : ', result);
-					this.repos = result.items;
+					if(result.total_count){
+						this.pages_count = Math.ceil(result.total_count / result.items.length);
+						console.log(this.pages_count);
+					}
+					if(result.items){
+						if(req.append){
+							result.items.forEach(element => {
+								this.repos.push(element);
+							});
+						} else {
+							this.repos = result.items;
+						}
+					}
 				})
-		},
+		}
 	},
 	data () {
 		return {
@@ -37,8 +81,8 @@ export default {
 				return date.toISOString().split('T')[0];
 			})(),
 			page: 1,
-			API_Endpoint: `https://api.github.com/search/repositories?q=created:>${this.createdBefore}&sort=stars&order=desc&page=${this.page}`,
-			repos: null,
+			pages_count: 0,
+			repos: [],
 			created_after: null,
 		}
 	},
@@ -47,7 +91,7 @@ export default {
 		Navbar, Repocard
 	},
 	mounted() {
-		this.fetchData();
+		this.fetchData({append: false});
 	}
 }
 </script>
@@ -86,4 +130,22 @@ export default {
 	flex-direction: column;
 	gap: 20px;
 }
+
+.loading{
+	padding: 10px;
+	text-align: center;
+}
+
+.pagination-wrapper{
+	display: flex;
+	justify-content: center;
+	margin: 20px 0 20px 20px;
+	ul{
+		list-style: none;
+		display: flex;
+		flex-direction: row;
+		gap: 10px;
+	}
+}
+
 </style>
