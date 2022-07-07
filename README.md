@@ -7,8 +7,7 @@ I used VueJs cuz i like it and it's clean. and i preffer working with html direc
 I created everything myself no copy-pasted code from internet or bootstrap all the styles are mine hade lot of fun making this mini project.
 
 ## NOTE - my experience with gemography
-If you're going to apply for gemography and found my repo and decided to get inspired from my work, Don't waste you're time i got rejected 😂
-, they will ask you to wait for 3 months and then re-apply, just don't waste you're time if you're really looking for a job.
+If you're going to apply for gemography and found my repo and decided to get inspired from my work, i got rejected on the first try and then i been told to reaply the next 3 months, and they did not specify what was wrong with my code. just so can expect this it's not that different from a classic hiring proccess.
 
 ## Project setup
 ```
